@@ -1,3 +1,27 @@
 .title {
     text-align: center;
 }
+
+.datatable, .tableNav {
+    margin-left: auto ;
+    margin-right: auto ;
+    min-width: 30% !important;
+}
+
+.datatable {
+    width: 100% !important;
+    min-width: 30% !important;
+    background-color: #353535;
+    color:whitesmoke;
+    overflow: auto;
+}
+
+.searchFilter {
+    margin-left: auto ;
+    max-width: 30% !important;
+    min-width: 30% !important;
+}
+
+.datatable-head, .datatable-body {
+    padding: 100px;
+}

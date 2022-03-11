@@ -19,7 +19,6 @@ const numberSlice = (value) => {
     }
 
     let decimalSplit = value.split('.');
-    console.log(value, decimalSplit[0] + decimalSplit[1].slice(0, 5));
     return decimalSplit[0] + '.' +  decimalSplit[1].slice(0, 5);
   }
   catch {
@@ -30,13 +29,13 @@ const numberSlice = (value) => {
 const Home = () => {
   return (
     <>
-      <h1>Home</h1>
       <DataTable
-        title='The Title'
+        title='Home'
         tableData={data}
-        removedHeadings={["id", "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "vwap24Hr", "explorer"]}
+        // removedHeadings={["id", "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "vwap24Hr", "explorer"]}
         headingTextOverride={[{key: "changePercent24Hr", text: "Percent Change in 24 Hours"}]}
         tableDataOveride={[{key: "priceUsd", function: numberSlice}, {key: "changePercent24Hr", function: roundTo2}]}
+        rowsShown={20}
       />
     </>
   );

@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState  } from "react";
+import { Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup } from 'react-bootstrap';
 import { useTable, useSortBy } from 'react-table'
+import { AiOutlineSearch } from 'react-icons/ai';
 import './DataTable.css';
 // https://www.npmjs.com/package/react-table
 
@@ -47,7 +49,10 @@ const covertColumnValue = (key, keyValue, tableDataTextOverideFunction) => {
   return newColumnValueText;
 }
 
-const ReactTable = ({ columns, data }) => {
+const ReactTable = ({ columns, data, rowsShown }) => {
+  const [rowsOffset, setRowOffset] = useState(0);
+  const [rowsEnd, setRowsEnd] = useState(rowsShown);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -57,19 +62,30 @@ const ReactTable = ({ columns, data }) => {
   } = useTable(
     {
       columns,
-      data
+      data,
+      // defaultColumn
     },
-    useSortBy
+    useSortBy, 
   );
+
+  const handleTableButtons = (method) => {
+    if (method === "+") {
+      setRowOffset(rowsOffset + rowsEnd)
+      setRowsEnd(rowsEnd + rowsEnd)
+    } else if (method === "-") {
+      setRowOffset(rowsOffset - rowsShown)
+      setRowsEnd(rowsEnd - rowsShown)
+    }
+  }
 
   // We don't want to render all 2000 rows for this example, so cap
   // it at 20 for this use case
-  const firstPageRows = rows.slice(0, 2);
+  const firstPageRows = rows.slice(rowsOffset, rowsEnd);
 
   return (
     <>
-      <table {...getTableProps()}>
-        <thead>
+      <table className="datatable" {...getTableProps()}>
+        <thead className="datatable-head">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
@@ -83,8 +99,6 @@ const ReactTable = ({ columns, data }) => {
                       ? column.isSortedDesc
                         ? " ⏷"
                         : " ⏶"
-                        // ? " 🔽"
-                        // : " 🔼"
                       : ""}
                   </span>
                 </th>
@@ -92,7 +106,7 @@ const ReactTable = ({ columns, data }) => {
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody className="datatable-body" {...getTableBodyProps()}>
           {firstPageRows.map((row, i) => {
             prepareRow(row);
             return (
@@ -107,13 +121,20 @@ const ReactTable = ({ columns, data }) => {
           })}
         </tbody>
       </table>
-      <br />
-      <div>Showing the first 20 results of {rows.length} rows</div>
+      {rows.length > rowsShown ?
+      <ButtonToolbar aria-label="Toolbar with button groups" className="tableNav">
+        <ButtonGroup className="me-2" aria-label="First group">
+          {rowsOffset > 0 ? <Button variant="primary" onClick={() => handleTableButtons("-")}>⏴</Button> : <Button variant="primary" onClick={() => handleTableButtons("-")} disabled>⏴</Button>}
+          {rowsEnd < rows.length ? <Button variant="primary" onClick={() => handleTableButtons("+")}>⏵</Button> : <Button variant="primary" onClick={() => handleTableButtons("+")} disabled>⏵</Button>}
+        </ButtonGroup>
+      </ButtonToolbar> : <></>}
     </>
   );
 }
 
-const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */}) => {
+const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20}) => {
+  const [searchTerm, setSearchTerm] = useState(rowsShown);
+
   let tableHead = [];
   if (tableData.length >=1) {
     Object.keys(tableData[0]).forEach((key) => {
@@ -139,64 +160,46 @@ const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, t
     })
   }
 
+  let temp2 = [];
+
+  tableData.forEach((ele) => {
+    let temp = Object.keys(ele).map((key) => {
+      if (ele[key]?.toString()?.toLowerCase()?.includes(searchTerm)) {
+        return ele;
+      }
+    })
+
+    // remove undefined
+    temp.forEach((ele) => {
+      if (ele) {
+        temp2.push(ele)
+      }
+    })
+  })
+    
+  // remove duplicates
+  let newTableData = temp2.filter((c, index) => {
+    return temp2.indexOf(c) === index;
+  });
 
   return (
     <>
+      <InputGroup className="mb-3 searchFilter">
+        <InputGroup.Text id="basic-addon1"><AiOutlineSearch/></InputGroup.Text>
+        <FormControl
+          placeholder="Search..."
+          aria-label="Search"
+          aria-describedby="basic-addon1"
+          onChange={e => setSearchTerm(e.target.value)}
+        />
+      </InputGroup>
       <ReactTable
         columns={tableHead}
-        data={tableData}
+        data={newTableData}
+        rowsShown={rowsShown}
       />
     </>
   )
 }
-
-// const DataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[]}) => {
-//   let tableHead = [];
-//   let tableHead = null;
-//   let tableBody = [];
-
-//   if (tableData.length >=1) {
-//     Object.keys(tableData[0]).forEach((key) => {
-//       if (removedHeadings.length >=1) {
-//         if (searchStringInArray(key, removedHeadings) === -1) {
-//           tableHead.push(key);
-//         }
-//       } else {
-//         tableHead.push(key);
-//       }
-//     })
-
-//     let headCount = 0;
-//     tableHead = tableHead.map(value => <th key={`head-${value}-${headCount++}`}>{value}</th>);
-
-//     tableData.forEach((tableRow, index) => {
-//       let cells = tableHead.map((value) => {
-//         return(<td key={`${index}-cell-${value}`}>{tableRow[value]}</td>)
-//       });
-//       tableBody.push(      
-//       <tr key={`row-${index}`}>
-//         {cells}
-//       </tr>);
-//     })
-//   }
-
-//   return ( 
-//       <>
-//         {title !== '' ? <h2 style={titleStyle} className="title">{title}</h2> : <></>}
-//         <div className='contentDiv'>
-//           <table className="table table-hover" style={tableStyle}>
-//             <thead>
-//               <tr style={tableHeadStyle}>
-//                 {tableHead}
-//               </tr>
-//             </thead>
-//             <tbody style={tableBodyStyle}>
-//               {tableBody}
-//             </tbody>
-//           </table>
-//         </div>
-//     </>
-//   );
-// }
 
 export default ReactDataTable;

@@ -20,6 +20,7 @@ code {
 .content { 
   background-image: url(./images/coin3.png);
   background-color: #444444;
+  padding: 7%;
 }
 
 .routing {

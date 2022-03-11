@@ -13,7 +13,8 @@ export default function App() {
         <div className="routing">        
           <ButtonToolbar aria-label="Toolbar with button groups">
             <ButtonGroup className="me-2" aria-label="First group">
-              <Link to="/"><Button variant="primary">ScoutCoin</Button></Link>
+              <Link to="/"><Button variant="primary">Logo</Button></Link>
+              <Link to="/"><Button variant="primary">Home</Button></Link>
               <Link to="/history"><Button variant="primary">History</Button></Link>
               <Link to="/exchangeRates"><Button variant="primary">ExchangeRates</Button></Link>
             </ButtonGroup>
