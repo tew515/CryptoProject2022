@@ -2,6 +2,7 @@ import React from "react";
 import DataTable from "../components/DataTable";
 import data from "../components/DataTable/data.json";
 
+// function to round decmimal values to 2 places
 const roundTo2 = (value) => {
   if (Number(value)) {
     if (value !== Math.floor(value)) {
@@ -12,6 +13,7 @@ const roundTo2 = (value) => {
   return value;
 }
 
+// function to cut off a decimal value after 5 places
 const numberSlice = (value) => {
   try {    
     if (!String(value)) {
@@ -32,7 +34,7 @@ const Home = () => {
       <DataTable
         title='Home'
         tableData={data}
-        // removedHeadings={["id", "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "vwap24Hr", "explorer"]}
+        removedHeadings={["id", "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "vwap24Hr", "explorer"]}
         headingTextOverride={[{key: "changePercent24Hr", text: "Percent Change in 24 Hours"}]}
         tableDataOveride={[{key: "priceUsd", function: numberSlice}, {key: "changePercent24Hr", function: roundTo2}]}
         rowsShown={20}

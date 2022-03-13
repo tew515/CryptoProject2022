@@ -1,10 +1,10 @@
 import React, { useState  } from "react";
 import { Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup } from 'react-bootstrap';
-import { useTable, useSortBy } from 'react-table'
+import { useTable, useSortBy } from 'react-table' // https://www.npmjs.com/package/react-table
 import { AiOutlineSearch } from 'react-icons/ai';
 import './DataTable.css';
-// https://www.npmjs.com/package/react-table
 
+// function to search for string in array and return its index if found
 const searchStringInArray = (str, strArray) => {
   for (var i=0; i<strArray.length; i++) {
       if (strArray[i].match(str)) return i;
@@ -12,11 +12,13 @@ const searchStringInArray = (str, strArray) => {
   return -1;
 }
 
+// function to convert [camelCase] strings to [Title Case]
 const camelCaseToTitleCase = (text) => {
   const result = text.replace(/([A-Z])/g, " $1");
   return result.charAt(0).toUpperCase() + result.slice(1);
 }
 
+// function to convert column names based on array prop of datatable/index.js
 const covertColumnNameText = (key, headingTextOverrideArray) => {
   let newColumnNameText = key;
     if (headingTextOverrideArray) {
@@ -32,6 +34,7 @@ const covertColumnNameText = (key, headingTextOverrideArray) => {
   return camelCaseToTitleCase(newColumnNameText);
 }
 
+// function to convert column values based on function prop of datatable/index.js
 const covertColumnValue = (key, keyValue, tableDataTextOverideFunction) => {
   let newColumnValueText = keyValue;
     if (tableDataTextOverideFunction) {
@@ -50,9 +53,11 @@ const covertColumnValue = (key, keyValue, tableDataTextOverideFunction) => {
 }
 
 const ReactTable = ({ columns, data, rowsShown }) => {
+  //  create state variables for row navigation values
   const [rowsOffset, setRowOffset] = useState(0);
   const [rowsEnd, setRowsEnd] = useState(rowsShown);
-
+  
+  // create values used for react table 
   const {
     getTableProps,
     getTableBodyProps,
@@ -68,6 +73,7 @@ const ReactTable = ({ columns, data, rowsShown }) => {
     useSortBy, 
   );
 
+  // function to handle table navigation button click events
   const handleTableButtons = (method) => {
     if (method === "+") {
       setRowOffset(rowsOffset + rowsEnd)
@@ -78,8 +84,7 @@ const ReactTable = ({ columns, data, rowsShown }) => {
     }
   }
 
-  // We don't want to render all 2000 rows for this example, so cap
-  // it at 20 for this use case
+  // return the right amount of rows for the table navigation
   const firstPageRows = rows.slice(rowsOffset, rowsEnd);
 
   return (
@@ -133,8 +138,10 @@ const ReactTable = ({ columns, data, rowsShown }) => {
 }
 
 const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20}) => {
+  //  create state variables for search input elememt
   const [searchTerm, setSearchTerm] = useState(rowsShown);
 
+  // create table values from prop keys (array of objects)
   let tableHead = [];
   if (tableData.length >=1) {
     Object.keys(tableData[0]).forEach((key) => {
@@ -169,7 +176,7 @@ const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, t
       }
     })
 
-    // remove undefined
+    // remove undefined values in array
     temp.forEach((ele) => {
       if (ele) {
         temp2.push(ele)
@@ -177,7 +184,7 @@ const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, t
     })
   })
     
-  // remove duplicates
+  // remove duplicates in array
   let newTableData = temp2.filter((c, index) => {
     return temp2.indexOf(c) === index;
   });
