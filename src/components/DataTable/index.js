@@ -89,48 +89,50 @@ const ReactTable = ({ columns, data, rowsShown }) => {
 
   return (
     <>
-      <table className="datatable" {...getTableProps()}>
-        <thead className="datatable-head">
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                // Add the sorting props to control sorting. For this example
-                // we can add them into the header props
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render("Header")}
-                  {/* Add a sort direction indicator */}
-                  <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? " ⏷"
-                        : " ⏶"
-                      : ""}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="datatable-body" {...getTableBodyProps()}>
-          {firstPageRows.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  );
-                })}
+      <div className="dataTableContainer">
+        <table className="datatable table table" {...getTableProps()}>
+          <thead className="datatableHead">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  // Add the sorting props to control sorting. For this example
+                  // we can add them into the header props
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render("Header")}
+                    {/* Add a sort direction indicator */}
+                    <span>
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? " ⏷"
+                          : " ⏶"
+                        : ""}
+                    </span>
+                  </th>
+                ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody className="datatableBody" {...getTableBodyProps()}>
+            {firstPageRows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <tr className="tableBodyRow" {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       {rows.length > rowsShown ?
       <ButtonToolbar aria-label="Toolbar with button groups" className="tableNav">
         <ButtonGroup className="me-2" aria-label="First group">
-          {rowsOffset > 0 ? <Button variant="primary" onClick={() => handleTableButtons("-")}>⏴</Button> : <Button variant="primary" onClick={() => handleTableButtons("-")} disabled>⏴</Button>}
-          {rowsEnd < rows.length ? <Button variant="primary" onClick={() => handleTableButtons("+")}>⏵</Button> : <Button variant="primary" onClick={() => handleTableButtons("+")} disabled>⏵</Button>}
+          {rowsOffset > 0 ? <Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("-")}>⏴</Button> : <Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("-")} disabled>⏴</Button>}
+          {rowsEnd < rows.length ? <Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("+")}>⏵</Button> : <Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("+")} disabled>⏵</Button>}
         </ButtonGroup>
       </ButtonToolbar> : <></>}
     </>
@@ -139,7 +141,10 @@ const ReactTable = ({ columns, data, rowsShown }) => {
 
 const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20}) => {
   //  create state variables for search input elememt
-  const [searchTerm, setSearchTerm] = useState(rowsShown);
+  const [searchTerm, setSearchTerm] = useState(rowsShown);  
+
+  // temporary array to store values with duplicates to be removed after foreach loop
+  let duplicateTableData = [];
 
   // create table values from prop keys (array of objects)
   let tableHead = [];
@@ -160,33 +165,30 @@ const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, t
       }
     })
 
-    tableData.forEach((ele) => {
-      Object.keys(ele).forEach((key) => {
+    tableData.forEach((ele) => {      
+      // temporary array that contains undefined variables as returned from map function
+      let undefinedTableData = Object.keys(ele).map((key) => {
+        // returns desired value if there is the prop to override original table values 
         ele[key] = covertColumnValue(key, ele[key], tableDataOveride);
+
+        // search all keys in all array indexes to return filtered data
+        if (ele[key]?.toString()?.toLowerCase()?.includes(searchTerm)) {
+          return ele;
+        }
+      })
+
+      // remove undefined values in array
+      undefinedTableData.forEach((ele) => {
+        if (ele) {
+          duplicateTableData.push(ele)
+        }
       })
     })
   }
-
-  let temp2 = [];
-
-  tableData.forEach((ele) => {
-    let temp = Object.keys(ele).map((key) => {
-      if (ele[key]?.toString()?.toLowerCase()?.includes(searchTerm)) {
-        return ele;
-      }
-    })
-
-    // remove undefined values in array
-    temp.forEach((ele) => {
-      if (ele) {
-        temp2.push(ele)
-      }
-    })
-  })
     
   // remove duplicates in array
-  let newTableData = temp2.filter((c, index) => {
-    return temp2.indexOf(c) === index;
+  let newTableData = duplicateTableData.filter((c, index) => {
+    return duplicateTableData.indexOf(c) === index;
   });
 
   return (

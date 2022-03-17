@@ -34,9 +34,11 @@ const Home = () => {
       <DataTable
         title='Home'
         tableData={data}
-        removedHeadings={["id", "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "vwap24Hr", "explorer"]}
+        // removedHeadings={["id", "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "vwap24Hr", "explorer"]}
+        // "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr" "vwap24Hr"
+        removedHeadings={["id", "explorer"]}
         headingTextOverride={[{key: "changePercent24Hr", text: "Percent Change in 24 Hours"}]}
-        tableDataOveride={[{key: "priceUsd", function: numberSlice}, {key: "changePercent24Hr", function: roundTo2}]}
+        tableDataOveride={[{key: "priceUsd", function: numberSlice}, {key: "changePercent24Hr", function: roundTo2}, {key: "supply", function: numberSlice}, {key: "maxSupply", function: numberSlice}, {key: "marketCapUsd", function: numberSlice}, {key: "volumeUsd24Hr", function: numberSlice},]}
         rowsShown={20}
       />
     </>

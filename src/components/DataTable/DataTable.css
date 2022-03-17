@@ -11,9 +11,7 @@
 .datatable {
     width: 100% !important;
     min-width: 30% !important;
-    background-color: #353535;
     color:whitesmoke;
-    overflow: auto;
 }
 
 .searchFilter {
@@ -22,6 +20,29 @@
     min-width: 30% !important;
 }
 
-.datatable-head, .datatable-body {
+.datatableHead, .datatableBody {
     padding: 100px;
+}
+
+.dataTableContainer 
+{
+    width:100%;
+    display: table;
+    padding: 10px;
+    background-color: #353535;
+    border-radius: 4px;
+}
+
+td {
+    padding: 4px;
+    word-break: break-word;
+}
+
+th {
+    width:fit-content;
+}
+
+.tableBodyRow:hover{  
+    background-color: #474747;
+    color:whitesmoke;
 }

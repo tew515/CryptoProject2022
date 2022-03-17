@@ -17,10 +17,38 @@ code {
   background-color: #444444;
 }
 
+.logo {
+  height: auto;
+  width: 200px;
+}
+
+.btn, tableNavButton {
+  filter: brightness(70%);
+}
 .content { 
   background-image: url(./images/coin3.png);
   background-color: #444444;
   padding: 7%;
+  height: 110vh;
+  font-size: 0.8vw;
+}
+
+@media screen and (max-width: 1800px) {
+  .content { 
+    font-size: 1vw;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .content { 
+    font-size: 1.5vw;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .content { 
+    font-size: 1.7vw;
+  }
 }
 
 .routing {

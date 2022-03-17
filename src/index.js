@@ -5,6 +5,7 @@ import Home from "./pages/home";
 import History from "./pages/history";
 import ExchangeRates from "./pages/exchangeRates";
 import './index.css';
+import logo from "./images/logo3Gold.png";
 
 export default function App() {
   return (
@@ -13,10 +14,10 @@ export default function App() {
         <div className="routing">        
           <ButtonToolbar aria-label="Toolbar with button groups">
             <ButtonGroup className="me-2" aria-label="First group">
-              <Link to="/"><Button variant="primary">Logo</Button></Link>
-              <Link to="/"><Button variant="primary">Home</Button></Link>
-              <Link to="/history"><Button variant="primary">History</Button></Link>
-              <Link to="/exchangeRates"><Button variant="primary">ExchangeRates</Button></Link>
+              <Link to="/"><img className="logo" src={logo} alt='ScoutCoin Lgo'/></Link> {/* #FFD500 */}
+              <Link to="/"><Button variant="warning">Home</Button></Link>
+              <Link to="/history"><Button variant="warning" >History</Button></Link>
+              <Link to="/exchangeRates"><Button variant="warning">ExchangeRates</Button></Link>
             </ButtonGroup>
           </ButtonToolbar>
         </div>
