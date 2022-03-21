@@ -1,39 +1,28 @@
-import React from "react";
+// import react functions and components
+import React, { useEffect, useState } from "react";
 import DataTable from "../components/DataTable";
-import data from "../components/DataTable/data.json";
 
-// function to round decmimal values to 2 places
-const roundTo2 = (value) => {
-  if (Number(value)) {
-    if (value !== Math.floor(value)) {
-      return parseFloat(value).toFixed(2);
-    }
-  }
+// import self defined functions and constants
+import fetch from "../components/Fetch/Helpers/fetch";
+import constants from "../components/Fetch/Helpers/constants";
+import { roundTo2, numberSlice } from '../components/Fetch/Helpers/functions';
 
-  return value;
-}
-
-// function to cut off a decimal value after 5 places
-const numberSlice = (value) => {
-  try {    
-    if (!String(value)) {
-      value = value.toString();
-    }
-
-    let decimalSplit = value.split('.');
-    return decimalSplit[0] + '.' +  decimalSplit[1].slice(0, 5);
-  }
-  catch {
-    return value;
-  }
-}
-
+// recat component to render homepage
 const Home = () => {
+  // state to store data 
+  const [basicAssetData, setBasicAssetData] = useState([]);
+
+  // use effect to fetch data when the component is mounted
+  useEffect(() => {
+    // fetch data and assign it to state once finished
+    fetch(constants.basicAssetDataUrl).then(data => setBasicAssetData(data?.data?.data));
+  }, [])
+
   return (
     <>
       <DataTable
         title='Home'
-        tableData={data}
+        tableData={basicAssetData}
         // removedHeadings={["id", "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "vwap24Hr", "explorer"]}
         // "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr" "vwap24Hr"
         removedHeadings={["id", "explorer"]}

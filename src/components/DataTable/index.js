@@ -1,64 +1,24 @@
-import React, { useState  } from "react";
+// import react functions and components
+import React, { useState, useEffect  } from "react";
 import { Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup } from 'react-bootstrap';
-import { useTable, useSortBy } from 'react-table' // https://www.npmjs.com/package/react-table
 import { AiOutlineSearch } from 'react-icons/ai';
+
+// import npm packages
+import { useTable, useSortBy } from 'react-table' // https://www.npmjs.com/package/react-table
+
+// import self defined functions and css
+import {  searchStringInArray, covertColumnNameText, covertColumnValue } from  '../../components/Fetch/Helpers/functions'
 import './DataTable.css';
 
-// function to search for string in array and return its index if found
-const searchStringInArray = (str, strArray) => {
-  for (var i=0; i<strArray.length; i++) {
-      if (strArray[i].match(str)) return i;
-  }
-  return -1;
-}
-
-// function to convert [camelCase] strings to [Title Case]
-const camelCaseToTitleCase = (text) => {
-  const result = text.replace(/([A-Z])/g, " $1");
-  return result.charAt(0).toUpperCase() + result.slice(1);
-}
-
-// function to convert column names based on array prop of datatable/index.js
-const covertColumnNameText = (key, headingTextOverrideArray) => {
-  let newColumnNameText = key;
-    if (headingTextOverrideArray) {
-      if (headingTextOverrideArray.length >=1) {
-      headingTextOverrideArray.forEach((headingTextValues) => {
-        if (key === headingTextValues.key) {
-          newColumnNameText = headingTextValues.text;
-        }
-      })
-    }
-  }
-
-  return camelCaseToTitleCase(newColumnNameText);
-}
-
-// function to convert column values based on function prop of datatable/index.js
-const covertColumnValue = (key, keyValue, tableDataTextOverideFunction) => {
-  let newColumnValueText = keyValue;
-    if (tableDataTextOverideFunction) {
-      if (tableDataTextOverideFunction.length >=1) {
-        tableDataTextOverideFunction.forEach((headingTextValues) => {
-        if (key === headingTextValues.key) {
-          if (headingTextValues.function instanceof Function) {
-            newColumnValueText = headingTextValues.function(keyValue);
-          }
-        }
-      })
-    }
-  }
-
-  return newColumnValueText;
-}
-
-const ReactTable = ({ columns, data, rowsShown }) => {
+// react component to define and return table jsx using react-table
+const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
   //  create state variables for row navigation values
   const [rowsOffset, setRowOffset] = useState(0);
   const [rowsEnd, setRowsEnd] = useState(rowsShown);
   
   // create values used for react table 
   const {
+    toggleSortBy,
     getTableProps,
     getTableBodyProps,
     headerGroups,
@@ -68,7 +28,6 @@ const ReactTable = ({ columns, data, rowsShown }) => {
     {
       columns,
       data,
-      // defaultColumn
     },
     useSortBy, 
   );
@@ -76,8 +35,8 @@ const ReactTable = ({ columns, data, rowsShown }) => {
   // function to handle table navigation button click events
   const handleTableButtons = (method) => {
     if (method === "+") {
-      setRowOffset(rowsOffset + rowsEnd)
-      setRowsEnd(rowsEnd + rowsEnd)
+      setRowOffset(rowsOffset + rowsShown)
+      setRowsEnd(rowsEnd + rowsShown)
     } else if (method === "-") {
       setRowOffset(rowsOffset - rowsShown)
       setRowsEnd(rowsEnd - rowsShown)
@@ -87,6 +46,41 @@ const ReactTable = ({ columns, data, rowsShown }) => {
   // return the right amount of rows for the table navigation
   const firstPageRows = rows.slice(rowsOffset, rowsEnd);
 
+  useEffect(() => {
+    toggleSortBy(idSortedby, true, true)
+  }, [idSortedby, toggleSortBy]);
+
+  // toggleSortBy(idSortedby, true, true)
+
+  // setSortBy([{id: "type", desc: false}]);
+
+  // headerGroups?.[0]?.headers?.forEach((header) => {
+  //   console.log(idSortedby, sortType, header.id)
+  //   if (idSortedby) {
+  //     if (idSortedby === header.id) {
+  //       header.toggleSortBy(true, true);
+  //       // header.isSorted = true;
+
+  //       // if (sortType.toLowerCase() === "asc") {
+  //       //   header.isSortedDesc = false;
+  //       // } else if (sortType.toLowerCase() === "desc") {
+  //       //   header.isSortedDesc = true;          
+  //       // }
+
+  //       console.log(header)
+  //     }
+  //   }
+  // })
+
+  // headerGroups.map((headerGroup) => {
+  //   headerGroup.getHeaderGroupProps();
+  //   headerGroup.headers.map((column) => {
+  //       // column.getHeaderProps(column.getSortByToggleProps());
+  //       column.getSortByToggleProps();
+  //       column.toggleSortBy(false, false);
+  //   })
+  // })
+  
   return (
     <>
       <div className="dataTableContainer">
@@ -139,18 +133,23 @@ const ReactTable = ({ columns, data, rowsShown }) => {
   );
 }
 
-const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20}) => {
+// react comonent to manage tableData and search functionality
+const ReactDataTable = ({ title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20, idSortedby, sortType }) => {
+  console.log(idSortedby, sortType)
   //  create state variables for search input elememt
-  const [searchTerm, setSearchTerm] = useState(rowsShown);  
+  const [searchTerm, setSearchTerm] = useState('');  
 
   // temporary array to store values with duplicates to be removed after foreach loop
   let duplicateTableData = [];
 
-  // create table values from prop keys (array of objects)
   let tableHead = [];
+  // if the tableData array is not empty
   if (tableData.length >=1) {
+    // create table values from prop tableData keys (array of objects)
     Object.keys(tableData[0]).forEach((key) => {
+      // if the removedHeadings array is not empty
       if (removedHeadings.length >=1) {
+        // if the string has not been added to the removedHeadings array add it to the array that renders the table headings
         if (searchStringInArray(key, removedHeadings) === -1) {
           tableHead.push({
             Header: covertColumnNameText(key, headingTextOverride),
@@ -190,6 +189,7 @@ const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, t
   let newTableData = duplicateTableData.filter((c, index) => {
     return duplicateTableData.indexOf(c) === index;
   });
+  
 
   return (
     <>
@@ -206,6 +206,8 @@ const ReactDataTable = ({title='', tableData=[], titleStyle={}, tableStyle={}, t
         columns={tableHead}
         data={newTableData}
         rowsShown={rowsShown}
+        idSortedby={idSortedby}
+        sortType={sortType}
       />
     </>
   )
