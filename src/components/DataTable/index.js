@@ -46,9 +46,9 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
   // return the right amount of rows for the table navigation
   const firstPageRows = rows.slice(rowsOffset, rowsEnd);
 
-  useEffect(() => {
-    toggleSortBy(idSortedby, true, true)
-  }, [idSortedby, toggleSortBy]);
+  // useEffect(() => {
+  //   toggleSortBy(idSortedby, true, true)
+  // }, [idSortedby, toggleSortBy]);
 
   // toggleSortBy(idSortedby, true, true)
 

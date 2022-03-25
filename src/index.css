@@ -55,3 +55,64 @@ code {
   background-color: #2b2b2b;
   padding: 20px;
 }
+
+.radio-item {
+  display: none;
+}
+
+div.dropdown {
+  background-color: white;
+  border: 0.1px solid #999;
+  color: black;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 0 !important;
+}
+
+.tag-remove {
+  visibility: hidden;
+}
+
+.tag-item .search {
+  border: none;
+  border-bottom: none !important;
+}
+
+.dropdown-trigger {
+  height: 30px !important;
+  overflow: hidden !important;
+}
+
+.dropdown-content {
+  padding: 15px !important;
+  max-height: 60vh;
+  overflow-y: scroll !important;
+}
+
+.react-dropdown-tree-select .dropdown .dropdown-trigger {
+  border: none !important;
+  padding: 1px !important;
+}
+
+.react-dropdown-tree-select .dropdown .dropdown-trigger.arrow.bottom::after {
+  box-sizing: border-box;
+  content: "▾" !important;
+  font-weight: bold;
+}
+
+.react-dropdown-tree-select .dropdown .dropdown-trigger.arrow.top::after {
+  box-sizing: border-box;
+  content: "▴" !important;
+  font-weight: bold;
+}
+
+.dropdown-trigger.arrow.bottom::after, .dropdown-trigger.arrow.top::after {
+  float: right;
+  top: 7px;
+  position: relative;
+}
+
+.dropdown-trigger {
+  min-width: 297px;
+  max-width: 297px;
+}
