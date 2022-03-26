@@ -21,7 +21,7 @@ const Home = () => {
   return (
     <>
       <DataTable
-        title='Home'
+        title='All Live Cryptocurrencies'
         tableData={basicAssetData}
         // removedHeadings={["id", "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr", "vwap24Hr", "explorer"]}
         // "supply", "maxSupply", "marketCapUsd", "volumeUsd24Hr" "vwap24Hr"

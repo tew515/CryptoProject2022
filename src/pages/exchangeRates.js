@@ -21,7 +21,7 @@ const ExchangeRates = () => {
   return (
     <>
       <DataTable
-        title='Home'
+        title='USD Exchange Rates'
         tableData={usdRatesData}
         headingTextOverride={[{key: "id", text: "Name"}]}
         tableDataOveride={[{key: "id", function: kebabCaseToTitleCase}, {key: "rateUsd", function: roundTo2}]}

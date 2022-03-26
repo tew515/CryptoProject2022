@@ -2,39 +2,53 @@
 import React, { useEffect, useState } from "react";
 import DataGraph from "../components/DataGraph";
 
-// npm packesgs
+// npm packages
+// datetime picker component
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
-
-import { format, set, getUnixTime, subDays, subMonths } from 'date-fns';
-
+// dropdown component
 import DropdownTreeSelect from 'react-dropdown-tree-select'
 import 'react-dropdown-tree-select/dist/styles.css'
-
-import Cookies from 'universal-cookie';
+// functions to manage datetime picker ranges
+import { format, set, getUnixTime, subDays, subMonths } from 'date-fns';
 
 // import self defined functions and constants
 import fetch from "../components/Fetch/Helpers/fetch";
 import constants from "../components/Fetch/Helpers/constants";
 
-// switch case hours
+// function to return the optimal datapoint interval in minutes
 function getBackendHourValue (hourDiff) {
-  if (hourDiff === 1) return 'm5';
-  else if (hourDiff >= 2  && hourDiff <= 5) return 'm15';
-  else if (hourDiff >= 6 && hourDiff <= 13) return 'm30';
-  else if (hourDiff >= 14 && hourDiff <= 24) return 'h1';
-  else if (hourDiff >= 25 && hourDiff <= 48) return 'h2';
-  else if (hourDiff >= 49 && hourDiff <= 144) return 'h6';
-  else if (hourDiff >= 145 && hourDiff <= 288) return 'h12';
-  else if (hourDiff >= 289) return 'd1';
-  else return 'm1';
+  let mins = hourDiff * 60;
+  // array of intervals used in backend api
+  let optionsStr = ['m1', 'm5', 'm15', 'm30', 'h1', 'h2', 'h6', 'h12', 'd1'];
+  // above array in minutes
+  let optionsInt= [1, 5, 15, 30, 60, 120, 360, 720, 1440];
+  // array of possible datapont ints
+  let datapointOptions = [];
+
+  optionsInt.forEach((option) => {
+    datapointOptions.push((mins / option))
+  })
+
+  // the ideal amount of datapoints
+  let goal = 60;
+
+  // returns int of datapoint options closest to the goal
+  var closest = datapointOptions.reduce(function(prev, curr) {
+    return (Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev);
+  });
+
+  // returns the ideal interval as a string
+  return optionsStr[datapointOptions.indexOf(closest)];
 }
 
+// function to asssble query parameters
 function returnQueryParams(url, data) {
   let queryParams = Object.keys(data).map(function(key) {
       return [key, data[key]].map(encodeURIComponent).join("=");
   }).join("&");
 
+  // if url is defined return full url withh params else just return params
   if (url) {
     return url + '?' + queryParams;
   } else {
@@ -44,21 +58,20 @@ function returnQueryParams(url, data) {
 
 // recat component to render homepage
 const History = () => {
-  
- 
-  const cookies = new Cookies();
-
+  // state to store the values of the input elements
   const [historyDateRangePickerValue, setHistoryDateRangePickerValue] = useState([set(new Date(), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }), new Date()]);
   const [historyDropdownValue, setHistoryDropdownValue] = useState([]);
   
-  // state to store data 
+  // state to store data from backend
   const [basicAssetList, setBasicAssetList] = useState([]);
   const [historicalAssetData, setHistoricalAssetData] = useState([]);
 
+  // datetimepicker functions
   const {
     afterToday
   } = DateRangePicker;
 
+  // string values used in datetime picker
   const formatString = "yyyy-MM-dd HH:mm";
   const placeholder = format(new Date(historyDateRangePickerValue[0]), formatString) + ' ~ ' + format(new Date(historyDateRangePickerValue[1]), formatString);
 
@@ -75,9 +88,7 @@ const History = () => {
   }, [])
 
   // use effect to fetch data when the data is changed
-  useEffect(() => {
-    // fetch data and assign it to state once finished
-    
+  useEffect(() => {    
     // get hours between dates
     let d1 = new Date(historyDateRangePickerValue[0]);
     let d2 = new Date(historyDateRangePickerValue[1]);
@@ -85,6 +96,7 @@ const History = () => {
     let hourDiff = Math.ceil(diff / 1000 / 60 / 60);
     let backendHourValue = getBackendHourValue(hourDiff); 
     
+    // create params object
     let queryParams = {
       id: historyDropdownValue?.[0]?.value, 
       interval: backendHourValue, 
@@ -93,30 +105,14 @@ const History = () => {
     };
 
     if (queryParams.id) {
-      fetch(returnQueryParams(constants.historicalAssetDataUrl, {queryString: returnQueryParams(undefined, queryParams)})).then(data => {
-        // setHistoricalAssetData(data?.data)
-        cookies.set('historicalAssetData', data?.data);
-      });
+      // fetch data and assign it to state once finished
+      fetch(returnQueryParams(constants.historicalAssetDataUrl, {queryString: returnQueryParams(undefined, queryParams)})).then(data => setHistoricalAssetData(data?.data));
     }
   }, [historyDropdownValue, historyDateRangePickerValue])
 
-    // use effect to fetch data when the data is changed
-    useEffect(() => {
-      console.log(basicAssetList)
-      // if (historyDropdownValue !== basicAssetList?.[0]?.value) {
-      //   const temp = [...basicAssetList];
-      //   temp[0].isDefaultValue = false;
-      //   setBasicAssetList(temp);
-      // }
-    }, [historyDropdownValue])
-
-
-    if (historyDropdownValue.length === 0) {
-      console.log(basicAssetList)
-    }
-
   return (
     <>
+      <h2>{historyDropdownValue?.[0]?.label} Price Over Time</h2>
       <div className="input-group">
         <DropdownTreeSelect 
           data={basicAssetList} 
@@ -173,8 +169,8 @@ const History = () => {
         />
       </div>      
       <DataGraph
-        title='History'
-        graphData={cookies.get('historicalAssetData') ? cookies.get('historicalAssetData') : 'cock'}
+        // title='History'
+        graphData={historicalAssetData ? historicalAssetData : []}
       />
     </>
   );

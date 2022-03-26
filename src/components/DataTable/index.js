@@ -1,10 +1,14 @@
 // import react functions and components
-import React, { useState, useEffect  } from "react";
-import { Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup } from 'react-bootstrap';
-import { AiOutlineSearch } from 'react-icons/ai';
+import React, { useState } from "react";
 
 // import npm packages
-import { useTable, useSortBy } from 'react-table' // https://www.npmjs.com/package/react-table
+// button and input components 
+import { Button, ButtonGroup, ButtonToolbar, FormControl, InputGroup } from 'react-bootstrap';
+// icon components
+import { AiOutlineSearch } from 'react-icons/ai';
+
+// table component and functions
+import { useTable, useSortBy } from 'react-table';
 
 // import self defined functions and css
 import {  searchStringInArray, covertColumnNameText, covertColumnValue } from  '../../components/Fetch/Helpers/functions'
@@ -18,7 +22,6 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
   
   // create values used for react table 
   const {
-    toggleSortBy,
     getTableProps,
     getTableBodyProps,
     headerGroups,
@@ -45,41 +48,6 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
 
   // return the right amount of rows for the table navigation
   const firstPageRows = rows.slice(rowsOffset, rowsEnd);
-
-  // useEffect(() => {
-  //   toggleSortBy(idSortedby, true, true)
-  // }, [idSortedby, toggleSortBy]);
-
-  // toggleSortBy(idSortedby, true, true)
-
-  // setSortBy([{id: "type", desc: false}]);
-
-  // headerGroups?.[0]?.headers?.forEach((header) => {
-  //   console.log(idSortedby, sortType, header.id)
-  //   if (idSortedby) {
-  //     if (idSortedby === header.id) {
-  //       header.toggleSortBy(true, true);
-  //       // header.isSorted = true;
-
-  //       // if (sortType.toLowerCase() === "asc") {
-  //       //   header.isSortedDesc = false;
-  //       // } else if (sortType.toLowerCase() === "desc") {
-  //       //   header.isSortedDesc = true;          
-  //       // }
-
-  //       console.log(header)
-  //     }
-  //   }
-  // })
-
-  // headerGroups.map((headerGroup) => {
-  //   headerGroup.getHeaderGroupProps();
-  //   headerGroup.headers.map((column) => {
-  //       // column.getHeaderProps(column.getSortByToggleProps());
-  //       column.getSortByToggleProps();
-  //       column.toggleSortBy(false, false);
-  //   })
-  // })
   
   return (
     <>
@@ -135,7 +103,6 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
 
 // react comonent to manage tableData and search functionality
 const ReactDataTable = ({ title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20, idSortedby, sortType }) => {
-  console.log(idSortedby, sortType)
   //  create state variables for search input elememt
   const [searchTerm, setSearchTerm] = useState('');  
 
@@ -193,6 +160,7 @@ const ReactDataTable = ({ title='', tableData=[], titleStyle={}, tableStyle={}, 
 
   return (
     <>
+      {title ? <h2>{title}</h2> : <></>}
       <InputGroup className="mb-3 searchFilter">
         <InputGroup.Text id="basic-addon1"><AiOutlineSearch/></InputGroup.Text>
         <FormControl
