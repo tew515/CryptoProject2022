@@ -19,7 +19,7 @@ code {
 
 :root { 
   /* background-image: url(./images/coin3.png); */
-  background-color: #f2f3f4;
+  /* background-color: #f2f3f4; */
 }
 
 .logo {
@@ -34,7 +34,7 @@ code {
   background-image: url(./images/coin3.png);
   background-color: #444444;
   padding: 7%;
-  height: 100vh;
+  height: 140vh;
   font-size: 0.8vw;
 }
 
@@ -47,17 +47,35 @@ h2 {
   .content { 
     font-size: 1vw;
   }
+  .dataGraphContainer {
+    font-size: 0.6vw !important;
+  }
 }
 
 @media screen and (max-width: 1400px) {
   .content { 
     font-size: 1.5vw;
   }
+  .dataGraphContainer {
+    font-size: 0.7vw !important;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .content { 
+    font-size: 1.5vw;
+  }
+  .dataGraphContainer {
+    font-size: 1.1vw !important;
+  }
 }
 
 @media screen and (max-width: 800px) {
   .content { 
     font-size: 1.7vw;
+  }
+  .dataGraphContainer {
+    font-size: 1.3vw !important;
   }
 }
 
@@ -126,3 +144,4 @@ div.dropdown {
   min-width: 297px;
   max-width: 297px;
 }
+
