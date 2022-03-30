@@ -1,5 +1,5 @@
 // import react functions and components
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // import npm packages
 // button and input components 
@@ -11,8 +11,10 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useTable, useSortBy } from 'react-table';
 
 // import self defined functions and css
-import {  searchStringInArray, covertColumnNameText, covertColumnValue } from  '../../components/Fetch/Helpers/functions'
+import { searchStringInArray, covertColumnNameText, covertColumnValue } from  '../../components/Fetch/Helpers/functions'
 import './DataTable.css';
+
+let searchChange = true;
 
 // react component to define and return table jsx using react-table
 const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
@@ -36,15 +38,31 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
   );
 
   // function to handle table navigation button click events
-  const handleTableButtons = (method) => {
+  const handleTableButtons = (method, multiplier) => {
     if (method === "+") {
-      setRowOffset(rowsOffset + rowsShown)
-      setRowsEnd(rowsEnd + rowsShown)
+      if (rows.length > rowsOffset + (rowsShown * multiplier)) {
+        setRowOffset(rowsOffset + (rowsShown * multiplier))
+        setRowsEnd(rowsEnd + (rowsShown * multiplier))        
+      } else {
+        setRowOffset(rows.length - rowsShown)
+        setRowsEnd(rows.length)
+      }
     } else if (method === "-") {
-      setRowOffset(rowsOffset - rowsShown)
-      setRowsEnd(rowsEnd - rowsShown)
+      if (rowsOffset - (rowsShown * multiplier) > 0) {
+        setRowOffset(rowsOffset - (rowsShown * multiplier))
+        setRowsEnd(rowsEnd - (rowsShown * multiplier))
+      } else {        
+        setRowOffset(0)
+        setRowsEnd(rowsShown)
+      }
     }
   }
+
+  // useEffect to return table rows to initial state when typing a search
+  useEffect(() => {
+    setRowOffset(0)
+    setRowsEnd(rowsShown)
+  }, [searchChange, rowsShown]);
 
   // return the right amount of rows for the table navigation
   const firstPageRows = rows.slice(rowsOffset, rowsEnd);
@@ -81,7 +99,11 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
                 <tr className="tableBodyRow" {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      <td {...cell.getCellProps([
+                        {
+                          className: cell.column.id === 'changePercent24Hr' ? cell.row.original?.changePercent24Hr > 0 ? 'cellPositive' : 'cellNegative' : ''
+                        }
+                      ])}>{cell.render("Cell")}</td>
                     );
                   })}
                 </tr>
@@ -93,8 +115,18 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
       {rows.length > rowsShown ?
       <ButtonToolbar aria-label="Toolbar with button groups" className="tableNav">
         <ButtonGroup className="me-2" aria-label="First group">
-          {rowsOffset > 0 ? <Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("-")}>⏴</Button> : <Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("-")} disabled>⏴</Button>}
-          {rowsEnd < rows.length ? <Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("+")}>⏵</Button> : <Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("+")} disabled>⏵</Button>}
+          {<Button variant="warning" className="tableNavButton" onClick={() => {
+              setRowOffset(0)
+              setRowsEnd(rowsShown)
+          }} disabled={rowsOffset === 0}>⏴⏴⏴</Button>}
+          {<Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("-", 5)} disabled={rowsOffset === 0}>⏴⏴</Button>}
+          {<Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("-", 1)} disabled={rowsOffset === 0}>⏴</Button>}
+          {<Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("+", 1)} disabled={rowsOffset === rows.length - rowsShown}>⏵</Button>}
+          {<Button variant="warning" className="tableNavButton" onClick={() => handleTableButtons("+", 5)} disabled={rowsOffset === rows.length - rowsShown}>⏵⏵</Button>}
+          {<Button variant="warning" className="tableNavButton" onClick={() => {
+              setRowOffset(rows.length - rowsShown)
+              setRowsEnd(rows.length)
+          }} disabled={rowsOffset === rows.length - rowsShown}>⏵⏵⏵</Button>}
         </ButtonGroup>
       </ButtonToolbar> : <></>}
     </>
@@ -167,7 +199,10 @@ const ReactDataTable = ({ title='', tableData=[], titleStyle={}, tableStyle={}, 
           placeholder="Search..."
           aria-label="Search"
           aria-describedby="basic-addon1"
-          onChange={e => setSearchTerm(e.target.value)}
+          onChange={e => {
+            setSearchTerm(e.target.value)
+            searchChange=!searchChange;
+          }}
         />
       </InputGroup>
       <ReactTable

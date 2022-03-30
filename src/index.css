@@ -145,3 +145,10 @@ div.dropdown {
   max-width: 297px;
 }
 
+.cellPositive {
+  color: green !important;
+}
+
+.cellNegative {
+  color: red !important;
+}

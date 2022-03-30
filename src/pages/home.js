@@ -17,7 +17,7 @@ const Home = () => {
     // fetch data and assign it to state once finished
     fetch(constants.basicAssetDataUrl).then(data => setBasicAssetData(data?.data?.data));
   }, [])
-
+  
   return (
     <>
       <DataTable
