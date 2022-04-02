@@ -16,6 +16,8 @@ const Home = () => {
   useEffect(() => {
     // fetch data and assign it to state once finished
     fetch(constants.basicAssetDataUrl).then(data => setBasicAssetData(data?.data?.data));
+    
+    setInterval(fetch(constants.basicAssetDataUrl).then(data => setBasicAssetData(data?.data?.data)), 3*60*1000);
   }, [])
   
   return (

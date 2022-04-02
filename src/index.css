@@ -13,8 +13,7 @@ code {
 }
 
 .recharts-cartesian-axis-tick-value {
-  /* margin: 100px !important; */
-  transform: translate(-0.1rem, 0.5rem);
+  transform: translate(-0.4rem, 0.5rem);
 }
 
 :root { 

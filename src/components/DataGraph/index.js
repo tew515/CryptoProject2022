@@ -13,7 +13,7 @@ import './DataGraph.css';
 // react comonent to manage tableData and search functionality
 const ReactDataGraph = ({ title='', graphData=[], titleStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20, idSortedby, sortType }) => {
   graphData.forEach((ele) => {
-    ele.date = format(new Date(ele?.date), "yyyy-MM-dd HH:mm")
+    ele.date = format(new Date(ele?.date), "yyyy.MM.dd HH:mm")
   })
   return (
     <>

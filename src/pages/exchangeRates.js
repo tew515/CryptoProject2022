@@ -16,6 +16,8 @@ const ExchangeRates = () => {
   useEffect(() => {
     // fetch data and assign it to state once finished
     fetch(constants.usdRatesDataUrl).then(data => setUsdRatesData(data?.data?.data));
+
+    setInterval(fetch(constants.usdRatesDataUrl).then(data => setUsdRatesData(data?.data?.data)), 3*60*1000);
   }, [])
 
   return (

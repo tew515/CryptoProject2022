@@ -106,7 +106,9 @@ const History = () => {
 
     if (queryParams.id) {
       // fetch data and assign it to state once finished
-      fetch(returnQueryParams(constants.historicalAssetDataUrl, {queryString: returnQueryParams(undefined, queryParams)})).then(data => setHistoricalAssetData(data?.data));
+      fetch(returnQueryParams(constants.historicalAssetDataUrl, queryParams)).then(data => setHistoricalAssetData(data?.data));
+
+      setInterval(fetch(returnQueryParams(constants.historicalAssetDataUrl, queryParams)).then(data => setHistoricalAssetData(data?.data)), 3*60*1000);
     }
   }, [historyDropdownValue, historyDateRangePickerValue])
 
@@ -155,7 +157,6 @@ const History = () => {
             },
             {
               label: 'Last 7 days',
-              // value: [subDays(new Date(), 6), new Date()]
               value: [set(subDays(new Date(), 6), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }), new Date()]
             },
             {
@@ -169,8 +170,7 @@ const History = () => {
         />
       </div>      
       <DataGraph
-        // title='History'
-        graphData={historicalAssetData ? historicalAssetData : []}
+        graphData={historicalAssetData ? historicalAssetData.data : []}
       />
     </>
   );
