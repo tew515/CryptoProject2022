@@ -1,3 +1,4 @@
+// common strings used in the project
 module.exports = {
     basicAssetDataUrl: 'http://localhost:3001/api/get/basicAssetData',
     basicAssetListUrl: 'http://localhost:3001/api/get/basicAssetlist',
