@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import DataTable from "../components/DataTable";
 
 // import self defined functions and constants
-import fetch from "../Helpers/fetch";
-import constants from "../Helpers/constants";
-import { roundTo2, numberSlice } from '../Helpers/functions';
+import fetch from "../helpers/fetch";
+import constants from "../helpers/constants";
+import { roundTo2, numberSlice } from '../helpers/functions';
 
 // recat component to render homepage
 const Home = () => {

@@ -13,8 +13,8 @@ import 'react-dropdown-tree-select/dist/styles.css'
 import { format, set, getUnixTime, subDays, subMonths } from 'date-fns';
 
 // import self defined functions and constants
-import fetch from "../Helpers/fetch";
-import constants from "../Helpers/constants";
+import fetch from "../helpers/fetch";
+import constants from "../helpers/constants";
 
 // function to return the optimal datapoint interval in minutes
 function getBackendHourValue (hourDiff) {

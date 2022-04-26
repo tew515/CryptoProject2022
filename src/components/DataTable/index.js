@@ -11,7 +11,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useTable, useSortBy } from 'react-table';
 
 // import self defined functions and css
-import { searchStringInArray, covertColumnNameText, covertColumnValue } from  '../../Helpers/functions'
+import { searchStringInArray, covertColumnNameText, covertColumnValue } from  '../../helpers/functions'
 import './DataTable.css';
 
 let searchChange = true;

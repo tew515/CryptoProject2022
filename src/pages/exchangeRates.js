@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import DataTable from "../components/DataTable";
 
 // import self defined functions and vars
-import fetch from "../Helpers/fetch";
-import constants from "../Helpers/constants";
-import { roundTo2, kebabCaseToTitleCase } from '../Helpers/functions';
+import fetch from "../helpers/fetch";
+import constants from "../helpers/constants";
+import { roundTo2, kebabCaseToTitleCase } from '../helpers/functions';
 
 // recat component to render homepage
 const ExchangeRates = () => {
