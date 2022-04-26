@@ -1,4 +1,4 @@
-// Checks the response, throwing rejections if error occured.
+// Checks the response, throwing rejections if error occured
 const HandleResponse = (Response) => {
     return Response.text().then(Text => {
         const Data = Text && JSON.parse(Text);
