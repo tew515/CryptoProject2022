@@ -14,7 +14,7 @@ export default function App() {
         <div className="routing">        
           <ButtonToolbar aria-label="Toolbar with button groups">
             <ButtonGroup className="me-2" aria-label="First group">
-              <Link to="/"><img className="logo" src={logo} alt='ScoutCoin Lgo'/></Link> {/* #FFD500 */}
+              <Link to="/"><img className="logo" src={logo} alt='ScoutCoin Lgo'/></Link>
               <Link to="/"><Button variant="warning">Home</Button></Link>
               <Link to="/history"><Button variant="warning" >History</Button></Link>
               <Link to="/exchangeRates"><Button variant="warning">ExchangeRates</Button></Link>
