@@ -13,8 +13,8 @@ import 'react-dropdown-tree-select/dist/styles.css'
 import { format, set, getUnixTime, subDays, subMonths } from 'date-fns';
 
 // import self defined functions and constants
-import fetch from "../components/Fetch/Helpers/fetch";
-import constants from "../components/Fetch/Helpers/constants";
+import fetch from "../Helpers/fetch";
+import constants from "../Helpers/constants";
 
 // function to return the optimal datapoint interval in minutes
 function getBackendHourValue (hourDiff) {
@@ -25,7 +25,6 @@ function getBackendHourValue (hourDiff) {
   let optionsInt= [1, 5, 15, 30, 60, 120, 360, 720, 1440];
   // array of possible datapont ints
   let datapointOptions = [];
-
   optionsInt.forEach((option) => {
     datapointOptions.push((mins / option))
   })
@@ -56,7 +55,7 @@ function returnQueryParams(url, data) {
   }
 }
 
-// recat component to render homepage
+// react component to render homepage
 const History = () => {
   // state to store the values of the input elements
   const [historyDateRangePickerValue, setHistoryDateRangePickerValue] = useState([set(new Date(), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }), new Date()]);
@@ -141,9 +140,6 @@ const History = () => {
         <DateRangePicker 
           id="historyDateRangePicker"
           onChange={(e) => setHistoryDateRangePickerValue(e)}
-          onOk={(e) => {
-            // change data
-          }}
           defaultValue={historyDateRangePickerValue}
           disabledDate={afterToday()} 
           ranges={[

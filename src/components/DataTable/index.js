@@ -11,13 +11,13 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { useTable, useSortBy } from 'react-table';
 
 // import self defined functions and css
-import { searchStringInArray, covertColumnNameText, covertColumnValue } from  '../../components/Fetch/Helpers/functions'
+import { searchStringInArray, covertColumnNameText, covertColumnValue } from  '../../Helpers/functions'
 import './DataTable.css';
 
 let searchChange = true;
 
 // react component to define and return table jsx using react-table
-const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
+const ReactTable = ({ columns, data, rowsShown }) => {
   //  create state variables for row navigation values
   const [rowsOffset, setRowOffset] = useState(0);
   const [rowsEnd, setRowsEnd] = useState(rowsShown);
@@ -75,11 +75,8 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  // Add the sorting props to control sorting. For this example
-                  // we can add them into the header props
                   <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                     {column.render("Header")}
-                    {/* Add a sort direction indicator */}
                     <span>
                       {column.isSorted
                         ? column.isSortedDesc
@@ -134,7 +131,7 @@ const ReactTable = ({ columns, data, rowsShown, idSortedby, sortType }) => {
 }
 
 // react comonent to manage tableData and search functionality
-const ReactDataTable = ({ title='', tableData=[], titleStyle={}, tableStyle={}, tableHeadStyle={}, tableBodyStyle={}, removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20, idSortedby, sortType }) => {
+const ReactDataTable = ({ title='', tableData=[], removedHeadings=[], headingTextOverride=[] /* {key, text} */, tableDataOveride=[] /* {key, function} */, rowsShown=20 }) => {
   //  create state variables for search input elememt
   const [searchTerm, setSearchTerm] = useState('');  
 
@@ -209,8 +206,6 @@ const ReactDataTable = ({ title='', tableData=[], titleStyle={}, tableStyle={}, 
         columns={tableHead}
         data={newTableData}
         rowsShown={rowsShown}
-        idSortedby={idSortedby}
-        sortType={sortType}
       />
     </>
   )
