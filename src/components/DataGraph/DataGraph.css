@@ -1,7 +1,4 @@
-.title {
-    text-align: center;
-}
-
+/* graph styling */
 .dataGraphContainer 
 {
     width:100%;
@@ -9,5 +6,8 @@
     padding: 10px;
     background-color: #353535;
     border-radius: 4px;
+}
+.recharts-cartesian-axis-tick-value {
+  transform: translate(-0.4rem, 0.5rem);
 }
 

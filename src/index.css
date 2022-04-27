@@ -1,34 +1,10 @@
-body {
-  margin: 0;
+/* navbar styling */
+.routing {
+  background-color: #2b2b2b;
+  padding: 20px;
 }
 
-h2 {  
-  color: #fff5f0 !important;
-  font-family: Arial, sans-serif !important;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-.recharts-cartesian-axis-tick-value {
-  transform: translate(-0.4rem, 0.5rem);
-}
-
-:root { 
-  /* background-image: url(./images/coin3.png); */
-  /* background-color: #f2f3f4; */
-}
-
-.logo {
-  height: auto;
-  width: 200px;
-}
-
-.btn, tableNavButton {
-  filter: brightness(70%);
-}
+/* content styling*/
 .content { 
   background-image: url(./images/coin3.png);
   background-color: #444444;
@@ -37,56 +13,34 @@ code {
   font-size: 0.8vw;
 }
 
-h2 {
+/* remove margin from body content */
+body {
+  margin: 0;
+}
+
+/* logo styling */
+.logo {
+  height: auto;
+  width: 200px;
+}
+
+/* title */
+h2 {  
+  color: #fff5f0 !important;
+  font-family: Arial, sans-serif !important;
   margin-bottom: 30px;
   text-align: center;
 }
-
-@media screen and (max-width: 1800px) {
-  .content { 
-    font-size: 1vw;
-  }
-  .dataGraphContainer {
-    font-size: 0.6vw !important;
-  }
+.title {
+  text-align: center;
 }
 
-@media screen and (max-width: 1400px) {
-  .content { 
-    font-size: 1.5vw;
-  }
-  .dataGraphContainer {
-    font-size: 0.7vw !important;
-  }
+/* button styling */
+.btn {
+  filter: brightness(70%);
 }
 
-@media screen and (max-width: 1200px) {
-  .content { 
-    font-size: 1.5vw;
-  }
-  .dataGraphContainer {
-    font-size: 1.1vw !important;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .content { 
-    font-size: 1.7vw;
-  }
-  .dataGraphContainer {
-    font-size: 1.3vw !important;
-  }
-}
-
-.routing {
-  background-color: #2b2b2b;
-  padding: 20px;
-}
-
-.radio-item {
-  display: none;
-}
-
+/* dropdown styling */
 div.dropdown {
   background-color: white;
   border: 0.1px solid #999;
@@ -96,58 +50,88 @@ div.dropdown {
   padding: 0 !important;
 }
 
+/* DropdownTreeSelect styling */
+.radio-item {
+  display: none;
+}
 .tag-remove {
   visibility: hidden;
 }
-
 .tag-item .search {
   border: none;
   border-bottom: none !important;
 }
-
 .dropdown-trigger {
   height: 30px !important;
   overflow: hidden !important;
 }
-
 .dropdown-content {
   padding: 15px !important;
   max-height: 60vh;
   overflow-y: scroll !important;
 }
-
 .react-dropdown-tree-select .dropdown .dropdown-trigger {
   border: none !important;
   padding: 1px !important;
 }
-
 .react-dropdown-tree-select .dropdown .dropdown-trigger.arrow.bottom::after {
   box-sizing: border-box;
   content: "▾" !important;
   font-weight: bold;
 }
-
 .react-dropdown-tree-select .dropdown .dropdown-trigger.arrow.top::after {
   box-sizing: border-box;
   content: "▴" !important;
   font-weight: bold;
 }
-
 .dropdown-trigger.arrow.bottom::after, .dropdown-trigger.arrow.top::after {
   float: right;
   top: 7px;
   position: relative;
 }
-
 .dropdown-trigger {
   min-width: 297px;
   max-width: 297px;
 }
 
+/* reactive cell styles */
 .cellPositive {
   color: green !important;
 }
-
 .cellNegative {
   color: red !important;
+}
+
+/* responsive media queries */
+@media screen and (max-width: 1800px) {
+  .content { 
+    font-size: 1vw;
+  }
+  .dataGraphContainer {
+    font-size: 0.6vw !important;
+  }
+}
+@media screen and (max-width: 1400px) {
+  .content { 
+    font-size: 1.5vw;
+  }
+  .dataGraphContainer {
+    font-size: 0.7vw !important;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .content { 
+    font-size: 1.5vw;
+  }
+  .dataGraphContainer {
+    font-size: 1.1vw !important;
+  }
+}
+@media screen and (max-width: 800px) {
+  .content { 
+    font-size: 1.7vw;
+  }
+  .dataGraphContainer {
+    font-size: 1.3vw !important;
+  }
 }
